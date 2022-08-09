@@ -1,6 +1,6 @@
 public class Line implements Comparable {
-    private Integer number;
-    private String word;
+    private final Integer number;
+    private final String word;
 
     public Line(String line) {
         int pos = line.indexOf(".");
@@ -12,16 +12,8 @@ public class Line implements Comparable {
         return number;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
     public String getWord() {
         return word;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
     }
 
     @Override

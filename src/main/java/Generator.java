@@ -7,8 +7,8 @@ import java.util.Random;
 public class Generator {
     public static final String FILE_PATH_PREFIX = "src/main/resources/";
 
-    private Random random = new Random();
-    private String[] words;
+    private final Random random = new Random();
+    private final String[] words;
 
     public Generator() {
         words = new String[10000];

@@ -16,16 +16,17 @@ public class Sorter {
     private void sortResult(List<String> files) {
         for (String file : files) {
             try {
-                var sortedLines = Files.readAllLines(Paths.get(file))
+                 final Path path = Paths.get(file);
+                var sortedLines = Files.readAllLines(path)
                         .stream().map(Line::new).sorted().collect(Collectors.toList());
-                Files.write(Path.of(file), sortedLines.stream().map(Line::build).collect(Collectors.toList()));
+                Files.write(path, sortedLines.stream().map(Line::build).collect(Collectors.toList()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    private class LineState implements Comparable {
+    static class LineState implements Comparable {
         public BufferedReader reader;
         public Line line;
 
