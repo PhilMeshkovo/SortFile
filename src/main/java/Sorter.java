@@ -3,20 +3,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Sorter {
     public void sort(String fileName, int resultLines) throws IOException {
         var files = splitFile(fileName, resultLines);
-        sortResult(files);
-        sortParts(files);
+        sortPartFiles(files);
+        mergeSortedFiles(files);
     }
 
-    private void sortResult(List<String> files) {
+    private void sortPartFiles(List<String> files) {
         for (String file : files) {
             try {
-                 final Path path = Paths.get(file);
+                final Path path = Paths.get(file);
                 var sortedLines = Files.readAllLines(path)
                         .stream().map(Line::new).sorted().collect(Collectors.toList());
                 Files.write(path, sortedLines.stream().map(Line::build).collect(Collectors.toList()));
@@ -45,7 +46,7 @@ public class Sorter {
         }
     }
 
-    private void sortParts(List<String> files) {
+    private void mergeSortedFiles(List<String> files) {
         var readers = files.stream().map(x -> {
             try {
                 return new BufferedReader(new FileReader(x));
@@ -63,7 +64,8 @@ public class Sorter {
         ).collect(Collectors.toList());
         try (PrintWriter writer = new PrintWriter(Generator.FILE_PATH_PREFIX + "result.txt")) {
             while (lineStates.size() > 0) {
-                var current = lineStates.stream().sorted().findFirst().get();
+                Collections.sort(lineStates);
+                var current = lineStates.get(0);
                 writer.write(current.line.build() + "\n");
 
                 String line = current.reader.readLine();
